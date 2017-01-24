@@ -1,0 +1,3 @@
+create table passenger(p_id number(10) primary key,name varchar2(20),email varchar2(20),contact_number number(10),gender varchar2(10),account_balence number(40));
+create table train_info(train_number number(10) primary key,source varchar2(20),destination varchar2(20),price number(10),seat_no varchar2(10),day varchar2(20));
+create table admin(user_id number(10)primary key,password varchar2(20));
