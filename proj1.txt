@@ -20,11 +20,17 @@ then
                 echo "Enter your gender: "
                 read gender
                 echo "Enter your account balance: "
-                read accountBalalance
+                read accountBalance
                 echo "Enter your unique userId: "
                 read passengerId
                 echo "Enter password: "
                 read password
+sqlplus -S E1093629/E1093629@UnixDB03 <<EOF
+set heading off;
+set feedback off;
+insert into passenger values($passengerId,'$name','$email',$mobile,'$gender',$accountBalance,'$password');
+exit;
+EOF
                 #dml commands
         else
                 echo "enter userid: "
@@ -32,11 +38,44 @@ then
                 echo "enter password: "
                 read password
                 #oracle statements
+pid=`sqlplus -S E1093629/E1093629@UnixDB03 << FOE
+   set heading off;
+   set feedback off;
+   select p_id from passenger where p_id=$passengerId;
+   exit;
+FOE`
+pass=`sqlplus -S E1093629/E1093629@UnixDB03 << EOF
+   set heading off;
+   set feedback off;
+   select password from passenger where p_id=$passengerId;
+   exit;
+EOF`
+#echo $pid $pass
+                if [ $pid != $passengerId ]
+                then
+                        if [ $pass != $password ]
+                        then
+                                echo "wrong credentials\n"
+                                break
+                        fi
+                fi
+                echo "Enter source: "
+                read source
+                echo "Enter destination: "
+                read destination
                 echo "Enter date in dd/mm/yyyy format: "
                 read date
                 echo "Number of seats required"
                 read n
+train=`sqlplus -S E1093629/E1093629@UnixDB03 << FOE
+set heading off;
+set feedback off;
+select * from Train_info;
+exit;
+FOE`
+                echo $train
                 count=1
+                cost=0
                 while [ $count -le $n ]
                 do
                         echo "Enter name of passenger number $count : "
@@ -45,9 +84,17 @@ then
                         read age
                         echo "Special Passenger? (y/n) : "
                         read type
+
                         count=`expr $count + 1`
                 done
                 #oracle statements
+                balance=`sqlplus -S E1093629/E1093629@UnixDB03 << EOF
+                set heading off;
+                set feedback off;
+                select account_balence from passenger where p_id=$passengerId;
+                exit;
+                EOF`
+                temp=`expr `
         fi
 fi
 if [ $user == "b" ]
@@ -116,6 +163,12 @@ then
                         echo "Enter days of journey(comma-separated): "
                         read days
                         #dml commands
+sqlplus -S E1093629/E1093629@UnixDB03 <<EOF
+set heading off;
+set feedback off;
+insert into train_info values($trainNumber,'$source','$destination',$fare,$seat,'$days');
+exit;
+EOF
                 fi
                 if [ $choice == "2" ]
                 then
