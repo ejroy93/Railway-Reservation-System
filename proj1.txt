@@ -1,0 +1,43 @@
+echo "Who are u? a)user b)admin";
+read i;
+while [ $i == "a" ]
+do
+echo "Register or login"
+read j
+if [ $j == "register" ]
+then
+echo "Enter your name"
+read a
+echo "Enter your email id"
+read b
+echo "Enter your contact no:"
+read c
+#dml commands
+else
+echo "enter userid"
+read d
+echo "enter password"
+read e
+break
+fi
+done
+echo "Enter user id:"
+read f
+echo "Enter password:"
+read g
+#validation
+echo "Whom do you want to make changes? a)passenger b)train"
+read h
+if [ $h == "a" ]
+then
+#show list of passengers
+echo "select the passenger to make changes"
+read i
+else
+echo "What changes do you want to make: 1)Departure time 2)Arrival time"
+read j
+fi
+if [ $j == "1" ]
+then
+#show the list of trains
+echo "Select the train number"
