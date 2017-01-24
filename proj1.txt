@@ -1,97 +1,141 @@
+#!/bin/sh
+while [ true ]
+do
 echo "welcome to .."
-echo "Who are u? a)user b)admin";
-read i;
-#while [ $i == "a" ]
-#do
-if [ $i == "a" ]
+echo "Who are u? a)user b)admin ? ";
+read user;
+
+if [ $user == "a" ]
 then
- echo "Register or login"
- read j
- if [ $j == "register" ]
-  then
-  echo "Enter your name"
-  read a
-  echo "Enter your email id"
-  read b
-  echo "Enter your contact no:"
-  read c
-  #dml commands
- else
-  echo "enter userid"
-  read d
-  echo "enter password"
-  read e
-  echo "Enter date"
-  read m
-  echo "Number of seats required"
-  read n
-  a=0
-  while [ $a -lt $n ]
-  do
-   echo "name:"
-   read p
-   echo "age:"
-   read q
-   echo "gender:"
-   read r
-  done
- # break
- fi
+        echo "Do you want to a)Register or b)Login? "
+        read choice
+        if [ $choice == "a" ]
+        then
+                echo "Enter your name: "
+                read name
+                echo "Enter your email id: "
+                read email
+                echo "Enter your mobile contact no: "
+                read mobile
+                echo "Enter your gender: "
+                read gender
+                echo "Enter your account balance: "
+                read accountBalalance
+                echo "Enter your unique userId: "
+                read passengerId
+                echo "Enter password: "
+                read password
+                #dml commands
+        else
+                echo "enter userid: "
+                read passengerId
+                echo "enter password: "
+                read password
+                #oracle statements
+                echo "Enter date in dd/mm/yyyy format: "
+                read date
+                echo "Number of seats required"
+                read n
+                count=1
+                while [ $count -le $n ]
+                do
+                        echo "Enter name of passenger number $count : "
+                        read name
+                        echo "Enter age: "
+                        read age
+                        echo "Special Passenger? (y/n) : "
+                        read type
+                        count=`expr $count + 1`
+                done
+                #oracle statements
+        fi
 fi
-#done
-if [ $i == "b" ]
+if [ $user == "b" ]
 then
-echo "Enter user id:"
-read f
-echo "Enter password:"
-read g
-#validation
-echo "Whom do you want to make changes? a)passenger b)train"
-read h
-if [ $h == "a" ]
+        echo "Enter user id: "
+        read userId
+        echo "Enter password:"
+        read password
+        #validation
+        echo "What do you want to change? a)passenger b)train"
+        read tableName
+        if [ $tableName == "a" ]
+        then
+                #show list of passengers
+                echo "select the choice :1)Insert 2)Update 3)Delete"
+                read choice
+                if [ $choice == "1" ]
+                then
+                        echo "Enter passenger name: "
+                        read name
+                        echo "Enter passenger email id: "
+                        read email
+                        echo "Enter passenger mobile contact no: "
+                        read mobile
+                        echo "Enter passenger gender: "
+                        read gender
+                        echo "Enter passenger account balance: "
+                        read accountBalalance
+                        echo "Enter passenger unique userId: "
+                        read passengerId
+                        echo "Enter passenger password: "
+                        read password
+                        #dml commands
+                fi
+                if [ $choice == "2" ]
+                then
+                        echo "select the passenger to make changes"
+                        #passenger list
+                        read passengerId
+                fi
+                if [ $choice == "3" ]
+                then
+                        echo "select the passenger to delete"
+                        #passenger list
+                        read passergerId
+                        #oracle statements
+                fi
+        fi
+        if [ $tableName == "b" ]
+        then
+                #show list of passengers
+                echo "select the choice :1)Insert 2)Update 3)Delete: "
+                read choice
+                if [ $choice == "1" ]
+                then
+                        echo "Enter train number: "
+                        read trainNumber
+                        echo "Enter source: "
+                        read source
+                        echo "Enter destination: "
+                        read destination
+                        echo "Enter fare: "
+                        read fare
+                        echo "Enter seat capacity: "
+                        read seat
+                        echo "Enter days of journey(comma-separated): "
+                        read days
+                        #dml commands
+                fi
+                if [ $choice == "2" ]
+                then
+                        echo "select the train number to make changes\n"
+                        #passenger list
+                        read trainNumber
+                fi
+                if [ $choice == "3" ]
+                then
+                        echo "select the train number to delete\n"
+                        #passenger list
+                        read trainNumber
+                fi
+        fi
+fi
+echo "Do you wish to quit?(y/n) "
+read choice
+if [ $choice == "y" ]
 then
-#show list of passengers
-#echo "select the passenger to make changes"
-#read i
-echo "select the choice :1)Insert 2)Update 3)Delete"
-read s
-if [ $s == "1" ]
- then
- echo "Enter your name"
-  read a1
-  echo "Enter your email id"
-  read b1
-  echo "Enter your contact no:"
-  read c1
+        break
 fi
-if [ $s == "2" ]
- then
- echo "select the passenger to make changes"
- #passenger list
- read ps
-fi
-if [ $s == "3" ]
- then
- echo "select the passenger to delete"
- #passenger list
- read psg
-fi
-else
-#echo "What changes do you want to make: 1)Departure time 2)Arrival time"
-echo "Select train number to make changes"
-read j
-fi
-if [ $j == "1" ]
-then
-#show the list of trains
-echo "Select the train number"
-read k
-echo "Set the departure time"
-read l
-else
-echo "Select the train number"
-read k
-echo "Set the arrival time"
-read l
-fi
-fi
+clear
+done
