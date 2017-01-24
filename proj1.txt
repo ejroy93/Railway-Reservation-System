@@ -1,26 +1,46 @@
+echo "welcome to .."
 echo "Who are u? a)user b)admin";
 read i;
-while [ $i == "a" ]
-do
-echo "Register or login"
-read j
-if [ $j == "register" ]
+#while [ $i == "a" ]
+#do
+if [ $i == "a" ]
 then
-echo "Enter your name"
-read a
-echo "Enter your email id"
-read b
-echo "Enter your contact no:"
-read c
-#dml commands
-else
-echo "enter userid"
-read d
-echo "enter password"
-read e
-break
+ echo "Register or login"
+ read j
+ if [ $j == "register" ]
+  then
+  echo "Enter your name"
+  read a
+  echo "Enter your email id"
+  read b
+  echo "Enter your contact no:"
+  read c
+  #dml commands
+ else
+  echo "enter userid"
+  read d
+  echo "enter password"
+  read e
+  echo "Enter date"
+  read m
+  echo "Number of seats required"
+  read n
+  a=0
+  while [ $a -lt $n ]
+  do
+   echo "name:"
+   read p
+   echo "age:"
+   read q
+   echo "gender:"
+   read r
+  done
+ # break
+ fi
 fi
-done
+#done
+if [ $i == "b" ]
+then
 echo "Enter user id:"
 read f
 echo "Enter password:"
@@ -31,13 +51,47 @@ read h
 if [ $h == "a" ]
 then
 #show list of passengers
-echo "select the passenger to make changes"
-read i
+#echo "select the passenger to make changes"
+#read i
+echo "select the choice :1)Insert 2)Update 3)Delete"
+read s
+if [ $s == "1" ]
+ then
+ echo "Enter your name"
+  read a1
+  echo "Enter your email id"
+  read b1
+  echo "Enter your contact no:"
+  read c1
+fi
+if [ $s == "2" ]
+ then
+ echo "select the passenger to make changes"
+ #passenger list
+ read ps
+fi
+if [ $s == "3" ]
+ then
+ echo "select the passenger to delete"
+ #passenger list
+ read psg
+fi
 else
-echo "What changes do you want to make: 1)Departure time 2)Arrival time"
+#echo "What changes do you want to make: 1)Departure time 2)Arrival time"
+echo "Select train number to make changes"
 read j
 fi
 if [ $j == "1" ]
 then
 #show the list of trains
 echo "Select the train number"
+read k
+echo "Set the departure time"
+read l
+else
+echo "Select the train number"
+read k
+echo "Set the arrival time"
+read l
+fi
+fi
