@@ -54,7 +54,7 @@ EOF`
                 if [[ $pid != "$passengerId" || $pass != "$password" ]];
                 then
                         echo "wrong credentials\n"
-                        break
+                        #break
                 fi
                 echo "Enter source: "
                 read source
@@ -70,7 +70,17 @@ set feedback off;
 select * from Train_info;
 exit;
 EOF`)
-                echo "${train[1]}\n${train[2]}"
+                count=0
+#echo ${train[*]}
+                while (( $count < ${#train[@]} ))
+                do
+                        for ((i = 1; i <= 6; i++)); do
+                                echo -n ${train[count]}
+                                echo -e -n '\t'
+                                count=`echo $count + 1`
+                        done
+                        echo
+                done
                 count=1
                 cost=0
                 while [ $count -le $n ]
@@ -91,7 +101,7 @@ EOF`)
                 select account_balence from passenger where p_id=$passengerId;
                 exit;
                 EOF`
-                temp=`expr `
+                #temp=`expr `
         fi
 fi
 if [ $user == "b" ]
