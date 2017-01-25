@@ -67,13 +67,13 @@ EOF`
                 read date
                 echo "Number of seats required"
                 read n
-train=`sqlplus -S E1093629/E1093629@UnixDB03 << FOE
+train=(`sqlplus -S E1093629/E1093629@UnixDB03 << EOF
 set heading off;
 set feedback off;
 select * from Train_info;
 exit;
-FOE`
-                echo $train
+EOF`)
+                echo "${train[1]}\n${train[2]}"
                 count=1
                 cost=0
                 while [ $count -le $n ]
