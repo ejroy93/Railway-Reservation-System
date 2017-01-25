@@ -51,13 +51,10 @@ pass=`sqlplus -S E1093629/E1093629@UnixDB03 << EOF
    exit;
 EOF`
 #echo $pid $pass
-                if [ $pid != $passengerId ]
+                if [[ $pid != "$passengerId" || $pass != "$password" ]];
                 then
-                        if [ $pass != $password ]
-                        then
-                                echo "wrong credentials\n"
-                                break
-                        fi
+                        echo "wrong credentials\n"
+                        break
                 fi
                 echo "Enter source: "
                 read source
