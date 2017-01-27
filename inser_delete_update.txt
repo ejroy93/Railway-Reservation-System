@@ -1,0 +1,211 @@
+sqlplus -S E1093629/E1093629@UnixDB03 <<EOF
+set heading off;
+set feedback off;
+insert into passenger values('$passengerId','$name','$email',$mobile,'$gender',$accountBalance,'$password');
+exit;
+EOF
+                fi
+                if [ $choice == "2" ]
+                then
+                        echo "select the passenger to make changes"
+                        #passenger list
+                        read passenger
+                        echo -e "what you want to update a)name b)email c)passengerid d)mobileno e)gender f)accountbalence g)password"
+                        read choice
+                        case $choice in
+                        a)
+                       echo "enter the new name"
+                        read nam
+sqlplus -S E1093629/E1093629@UnixDB03 << EOF
+   set heading off;
+
+ set feedback off;
+ update passenger set name='$nam' where p_id='$passenger';
+  commit;
+ exit;
+EOF
+;;
+                        b)
+                         echo "enter the new email"
+                        read nam
+sqlplus -S E1093629/E1093629@UnixDB03 << EOF
+   set heading off;
+   set feedback off;
+ update passenger set email='$nam' where p_id='$passenger';
+  commit;
+ exit;
+EOF
+;;
+                         d)
+                         echo "enter the new mobile no"
+                        read nam
+sqlplus -S E1093629/E1093629@UnixDB03 << EOF
+   set heading off;
+   set feedback off;
+ update passenger set contact_number=$nam where p_id='$passenger';
+  commit;
+ exit;
+EOF
+;;
+                          e)
+                         echo "enter the new gender"
+                         read nam
+sqlplus -S E1093629/E1093629@UnixDB03 << EOF
+   set heading off;
+   set feedback off;
+ update passenger set gender='$nam' where p_id='$passenger';
+  commit;
+ exit;
+EOF
+;;
+                          f)
+                         echo "enter the new account balence"
+                         read nam
+sqlplus -S E1093629/E1093629@UnixDB03 << EOF
+
+set heading off;
+   set feedback off;
+ update passenger set account_balence=$nam where p_id='$passenger';
+  commit;
+ exit;
+EOF
+;;
+                         g)
+                         echo "enter the new password"
+                         read nam
+sqlplus -S E1093629/E1093629@UnixDB03 << EOF
+   set heading off;
+   set feedback off;
+ update passenger set account_balence='$nam' where p_id='$passenger';
+  commit;
+ exit;
+EOF
+;;
+esac
+                fi
+                if [ $choice == "3" ]
+                then
+                        echo "select the passenger to delete"
+                        #passenger list
+                        read passengerId
+                        #oracle statement
+sqlplus -S E1093629/E1093629@UnixDB03 << EOF
+   set heading off;
+   set feedback off;
+ delete from passenger where p_id='$passengerId';
+
+ commit;
+ exit;
+EOF
+        fi
+        fi
+        if [ $tableName == "b" ]
+        then
+                #show list of passengers
+                echo "select the choice :1)Insert 2)Update 3)Delete: "
+                read choice
+                if [ $choice == "1" ]
+                then
+
+
+
+
+
+
+sqlplus -S E1093629/E1093629@UnixDB03 <<EOF
+set heading off;
+set feedback off;
+insert into train_info values($trainNumber,'$source','$destination',$fare,$seat,'$days');
+exit;
+EOF
+                fi
+                if [ $choice == "2" ]
+                then
+                        echo "select the train number to make changes\n"
+                        #passenger list
+                        read trainNumber
+                         echo -e "what you want to update a)source b)destination  c)price d)seat_no e)day "
+                                                                                                               
+
+
+ read choice
+                        case $choice in
+                        a)
+                       echo "enter the new source"
+                        read nam
+sqlplus -S E1093629/E1093629@UnixDB03 << EOF
+   set heading off;
+   set feedback off;
+ update train_info set source='$nam' where train_number='$trainNumber';
+  commit;
+ exit;
+EOF
+;;
+                        b)
+                         echo "enter the new  destination"
+                        read nam
+sqlplus -S E1093629/E1093629@UnixDB03 << EOF
+   set heading off;
+   set feedback off;
+ update train_info set destination='$nam' where train_number='$trainNumber';
+  commit;
+ exit;
+EOF
+;;
+                         c)
+                         echo "enter the new price"
+                        read nam
+sqlplus -S E1093629/E1093629@UnixDB03 << EOF
+   set heading off;
+   set feedback off;
+ update train_info set price=$nam where train_number='$trainNumber';
+  commit;
+ exit;
+EOF
+;;
+                          d)
+                         echo "enter the new seat_no"
+                         read nam
+sqlplus -S E1093629/E1093629@UnixDB03 << EOF
+   set heading off;
+   set feedback off;
+ update train_info set seat_no='$num' where train_number='$trainNumber';
+  commit;
+                                                                
+
+ exit;
+EOF
+;;
+                          e)
+                         echo "enter the new days"
+                         read nam
+sqlplus -S E1093629/E1093629@UnixDB03 << EOF
+   set heading off;
+   set feedback off;
+ update train_info set day=$nam where train_number='$trainNumber';
+  commit;
+ exit;
+EOF
+;;
+esac
+
+
+                fi
+                if [ $choice == "3" ]
+                then
+                        echo "select the train number to delete\n"
+                        #passenger list
+                        read trainNumber
+sqlplus -S E1093629/E1093629@UnixDB03 << EOF
+   set heading off;
+   set feedback off;
+ delete from train_info where train_number='$trainNumber';
+ commit;
+ exit;
+EOF
+    
+
+
+                                        
+                                                   
+                                                                      
