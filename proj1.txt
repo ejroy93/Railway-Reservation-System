@@ -28,42 +28,43 @@ then
 sqlplus -S E1093629/E1093629@UnixDB03 <<EOF
 set heading off;
 set feedback off;
-insert into passenger values($passengerId,'$name','$email',$mobile,'$gender',$accountBalance,'$password');
+insert into passenger values('$passengerId','$name','$email',$mobile,'$gender',$accountBalance,'$password');
 exit;
 EOF
                 #dml commands
         else
                 echo "enter userid: "
-                read passengerId
+                read  passengerId
                 echo "enter password: "
-                read password
+                read  password
                 #oracle statements
-pid=`sqlplus -S E1093629/E1093629@UnixDB03 << FOE
-   set heading off;
-   set feedback off;
-   select p_id from passenger where p_id=$passengerId;
-   exit;
-FOE`
+#pid=`sqlplus -S E1093629/E1093629@UnixDB03 << EOF
+#set heading off;
+#set feedback off;
+#select p_id from passenger where p_id=$passengerId;
+#exit;
+#EOF`
+#echo $pid
 pass=`sqlplus -S E1093629/E1093629@UnixDB03 << EOF
-   set heading off;
-   set feedback off;
-   select password from passenger where p_id=$passengerId;
-   exit;
+set heading off;
+set feedback off;
+select password from passenger where p_id='$passengerId';
+exit;
 EOF`
-#echo $pid $pass
-                if [[ $pid != "$passengerId" || $pass != "$password" ]];
+#echo $pass $password
+#echo "$pass" "$password"
+#if [ "$pass" != "$password" ]; then echo hello; fi
+
+                if [ $pass == "$password" ];
                 then
-                        echo "wrong credentials\n"
-                        #break
-                fi
-                echo "Enter source: "
-                read source
-                echo "Enter destination: "
-                read destination
-                echo "Enter date in dd/mm/yyyy format: "
-                read date
-                echo "Number of seats required"
-                read n
+                        echo "Enter source: "
+                        read source
+                        echo "Enter destination: "
+                        read destination
+                        echo "Enter date in dd/mm/yyyy format: "
+                        read date
+                        echo "Number of seats required"
+                        read n
 train=(`sqlplus -S E1093629/E1093629@UnixDB03 << EOF
 set heading off;
 set feedback off;
@@ -72,36 +73,39 @@ exit;
 EOF`)
                 count=0
 #echo ${train[*]}
-                while (( $count < ${#train[@]} ))
-                do
-                        for ((i = 1; i <= 6; i++)); do
-                                echo -n ${train[count]}
-                                echo -e -n '\t'
-                                count=`echo $count + 1`
+                        while (( $count < ${#train[@]} ))
+                        do
+                                for ((i = 1; i <= 6; i++)); do
+                                        echo -n ${train[count]}
+                                        echo -e -n '\t'
+                                        count=`echo $count + 1`
+                                done
+                                echo
                         done
-                        echo
-                done
-                count=1
-                cost=0
-                while [ $count -le $n ]
-                do
-                        echo "Enter name of passenger number $count : "
-                        read name
-                        echo "Enter age: "
-                        read age
-                        echo "Special Passenger? (y/n) : "
-                        read type
+                        count=1
+                        cost=0
+                        while [ $count -le $n ]
+                        do
+                                echo "Enter name of passenger number $count : "
+                                read name
+                                echo "Enter age: "
+                                read age
+                                echo "Special Passenger? (y/n) : "
+                                read type
 
-                        count=`expr $count + 1`
-                done
-                #oracle statements
-                balance=`sqlplus -S E1093629/E1093629@UnixDB03 << EOF
-                set heading off;
-                set feedback off;
-                select account_balence from passenger where p_id=$passengerId;
-                exit;
-                EOF`
-                #temp=`expr `
+                                count=`expr $count + 1`
+                        done
+                        #oracle statements
+balance=`sqlplus -S E1093629/E1093629@UnixDB03 << EOF
+set heading off;
+set feedback off;
+select account_balence from passenger where p_id=$passengerId;
+exit;
+EOF`
+                else
+                        echo wrong credentials!!
+                        continue
+                fi
         fi
 fi
 if [ $user == "b" ]
@@ -111,83 +115,92 @@ then
         echo "Enter password:"
         read password
         #validation
-        echo "What do you want to change? a)passenger b)train"
-        read tableName
-        if [ $tableName == "a" ]
+pass=`sqlplus -S E1093629/E1093629@UnixDB03 << EOF
+set heading off;
+set feedback off;
+select password from admin where user_id='$userId';
+exit;
+EOF`
+        if [ $pass == "$password" ];
         then
-                #show list of passengers
-                echo "select the choice :1)Insert 2)Update 3)Delete"
-                read choice
-                if [ $choice == "1" ]
+                echo "What do you want to change? a)passenger b)train"
+                read tableName
+                if [ $tableName == "a" ]
                 then
-                        echo "Enter passenger name: "
-                        read name
-                        echo "Enter passenger email id: "
-                        read email
-                        echo "Enter passenger mobile contact no: "
-                        read mobile
-                        echo "Enter passenger gender: "
-                        read gender
-                        echo "Enter passenger account balance: "
-                        read accountBalalance
-                        echo "Enter passenger unique userId: "
-                        read passengerId
-                        echo "Enter passenger password: "
-                        read password
-                        #dml commands
+                        #show list of passengers
+                        echo "select the choice :1)Insert 2)Update 3)Delete"
+                        read choice
+                        if [ $choice == "1" ]
+                        then
+                                echo "Enter passenger name: "
+                                read name
+                                echo "Enter passenger email id: "
+                                read email
+                                echo "Enter passenger mobile contact no: "
+                                read mobile
+                                echo "Enter passenger gender: "
+                                read gender
+                                echo "Enter passenger account balance: "
+                                read accountBalalance
+                                echo "Enter passenger unique userId: "
+                                read passengerId
+                                echo "Enter passenger password: "
+                                read password
+                                #dml co mmands
+                        fi
+                        if [ $choice == "2" ]
+                        then
+                                echo "select the passenger to make changes"
+                                #passenger list
+                                read passengerId
+                        fi
+                        if [ $choice == "3" ]
+                        then
+                                echo "select the passenger to delete"
+                                #passenger list
+                                read passergerId
+                                #oracle statements
+                        fi
                 fi
-                if [ $choice == "2" ]
+                if [ $tableName == "b" ]
                 then
-                        echo "select the passenger to make changes"
-                        #passenger list
-                        read passengerId
-                fi
-                if [ $choice == "3" ]
-                then
-                        echo "select the passenger to delete"
-                        #passenger list
-                        read passergerId
-                        #oracle statements
-                fi
-        fi
-        if [ $tableName == "b" ]
-        then
-                #show list of passengers
-                echo "select the choice :1)Insert 2)Update 3)Delete: "
-                read choice
-                if [ $choice == "1" ]
-                then
-                        echo "Enter train number: "
-                        read trainNumber
-                        echo "Enter source: "
-                        read source
-                        echo "Enter destination: "
-                        read destination
-                        echo "Enter fare: "
-                        read fare
-                        echo "Enter seat capacity: "
-                        read seat
-                        echo "Enter days of journey(comma-separated): "
-                        read days
-                        #dml commands
+                        #show list of passengers
+                        echo "select the choice :1)Insert 2)Update 3)Delete: "
+                        read choice
+                        if [ $choice == "1" ]
+                        then
+                                echo "Enter train number: "
+                                read trainNumber
+                                echo "Enter source: "
+                                read source
+                                echo "Enter destination: "
+                                read destination
+                                echo "Enter fare: "
+                                read fare
+                                echo "Enter seat capacity: "
+                                read seat
+                                echo "Enter days of journey(comma-separated): "
+                                read days
+                                #dml commands
 sqlplus -S E1093629/E1093629@UnixDB03 <<EOF
 set heading off;
 set feedback off;
 insert into train_info values($trainNumber,'$source','$destination',$fare,$seat,'$days');
 exit;
 EOF
-                fi
-                if [ $choice == "2" ]
-                then
-                        echo "select the train number to make changes\n"
-                        #passenger list
-                        read trainNumber
-                fi
-                if [ $choice == "3" ]
-                then
-                        echo "select the train number to delete\n"
-                        #passenger list
-                        read trainNumber
+                        fi
+                        if [ $choice == "2" ]
+                        then
+                                echo "select the train number to make changes\n"
+                                #passenger list
+                                read trainNumber
+                        fi
+                        if [ $choice == "3" ]
+                        then
+                                echo "select the train number to delete\n"
+                                #passenger list
+                                read trainNumber
+                        fi
                 fi
         fi
 fi
