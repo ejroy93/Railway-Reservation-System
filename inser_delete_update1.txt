@@ -1,0 +1,433 @@
+#!/bin/sh
+while [ true ]
+do
+echo "welcome to .."
+echo "Who are u? a)user b)admin ? ";
+read user;
+
+if [ $user == "a" ]
+then
+        echo "Do you want to a)Register or b)Login? "
+        read choice
+        if [ $choice == "a" ]
+        then
+                echo "Enter your name: "
+                read name
+                echo "Enter your email id: "
+                read email
+                echo "Enter your mobile contact no: "
+                read mobile
+                echo "Enter your gender: "
+                read gender
+                echo "Enter your account balance: "
+                read accountBalance
+                echo "Enter your unique userId: "
+                read passengerId
+                echo "Enter password: "
+                read password
+sqlplus -S E1093629/E1093629@UnixDB03 <<EOF
+set heading off;
+set feedback off;
+insert into passenger values($passengerId,'$name','$email',$mobile,'$gender',$accountBalance,'$password');
+exit;
+EOF
+                #dml commands
+        else
+                echo "enter userid: "
+                read passengerId
+                echo "enter password: "
+                read password
+                #oracle statements
+pid=`sqlplus -S E1093629/E1093629@UnixDB03 << FOE
+   set heading off;
+   set feedback off;
+   select p_id from passenger where p_id=$passengerId;
+   exit;
+FOE`
+pass=`sqlplus -S E1093629/E1093629@UnixDB03 << EOF
+   set heading off;
+   set feedback off;
+   select password from passenger where p_id=$passengerId;
+   exit;
+EOF`
+#echo $pid $pass
+echo $pass $pid
+                if [[ $pid = "$passengerId" && $pass = "$password" ]];
+                then
+                #break
+                echo "Enter source: "
+                read source
+                echo "Enter destination: "
+                read destination
+                echo "Enter date in dd/mm/yyyy format: "
+                read date
+                echo "Number of seats required"
+                read n
+          else
+             echo "wrong credentials\n"
+              break
+              fi
+
+train=(`sqlplus -S E1093629/E1093629@UnixDB03 << EOF
+set heading off;
+set feedback off;
+select * from train_info;
+exit;
+EOF`)
+                count=0
+#echo ${train[*]}
+                while (( $count < ${#train[@]} ))
+                do
+                        for ((i = 1; i <= 6; i++)); do
+                                echo -n ${train[count]}
+                                echo -e -n '\t'
+                                count=`expr $count + 1`
+                        done
+                        echo
+                done
+                count=1
+                cost=0
+                while [ $count -le $n ]
+                do
+                        echo "Enter name of passenger number $count : "
+                        read name
+                        echo "Enter age: "
+                        read age
+                        echo "Special Passenger? (y/n) : "
+                        read type
+                        count=`expr $count + 1`
+                done
+                #oracle statements
+                balance=`sqlplus -S E1093629/E1093629@UnixDB03 << EOF
+                set heading off;
+                set feedback off;
+                select account_balence from passenger where p_id=$passengerId;
+                exit;
+                EOF`
+                #temp=`expr `
+        fi
+fi
+if [ $user == "b" ]
+then
+        echo "Enter user id: "
+        read userId
+        echo "Enter password:"
+        read password
+        #validation
+        echo "What do you want to change? a)passenger b)train"
+        read tableName
+        if [ $tableName == "a" ]
+        then
+                #show list of passengers
+                echo "select the choice :1)Insert 2)Update 3)Delete"
+                read choice
+                if [ $choice == "1" ]
+                then
+                        echo "Enter passenger name: "
+                        read name
+                        echo "Enter passenger email id: "
+                        read email
+                        echo "Enter passenger mobile contact no: "
+                        read mobile
+                        echo "Enter passenger gender: "
+                        read gender
+                        echo "Enter passenger account balance: "
+                        read accountBalance
+                        echo "Enter passenger unique userId: "
+                        read passengerId
+                        echo "Enter passenger password: "
+                        read password
+sqlplus -S E1093629/E1093629@UnixDB03 <<EOF
+set heading off;
+set feedback off;
+insert into passenger values('$passengerId','$name','$email',$mobile,'$gender',$accountBalance,'$password');
+exit;
+EOF
+                fi
+                if [ $choice == "2" ]
+                then
+               train=(`sqlplus -S E1093629/E1093629@UnixDB03 << EOF
+set heading off;
+set feedback off;
+select * from passenger;
+exit;
+EOF`)
+                count=0
+echo ${train[*]}
+                while (( $count < ${#train[@]} ))
+                do
+                        for ((i = 1; i <= 7; i++)); do
+                                echo -n ${train[count]}
+                                echo -e -n '\t'
+                                count=`expr $count + 1`
+                        done
+                        echo
+                done
+
+                   echo "select the passenger to make changes"
+                        #passenger list
+                        read passenger
+                        echo -e "what you want to update a)name b)email c)passengerid d)mobileno e)gender f)accountbalence g)password"
+                        read choice
+                        case $choice in
+                        a)
+                       echo "enter the new name"
+                        read nam
+sqlplus -S E1093629/E1093629@UnixDB03 << EOF
+   set heading off;
+   set feedback off;
+ update passenger set name='$nam' where p_id='$passenger';
+  commit;
+ exit;
+EOF
+;;
+                        b)
+                         echo "enter the new email"
+                        read nam
+sqlplus -S E1093629/E1093629@UnixDB03 << EOF
+   set heading off;
+   set feedback off;
+ update passenger set email='$nam' where p_id='$passenger';
+  commit;
+ exit;
+EOF
+;;
+                         d)
+                         echo "enter the new mobile no"
+                        read nam
+sqlplus -S E1093629/E1093629@UnixDB03 << EOF
+   set heading off;
+   set feedback off;
+ update passenger set contact_number=$nam where p_id='$passenger';
+  commit;
+ exit;
+EOF
+;;
+                          e)
+                         echo "enter the new gender"
+                         read nam
+sqlplus -S E1093629/E1093629@UnixDB03 << EOF
+   set heading off;
+   set feedback off;
+ update passenger set gender='$nam' where p_id='$passenger';
+  commit;
+ exit;
+EOF
+;;
+                          f)
+                         echo "enter the new account balence"
+                         read nam
+sqlplus -S E1093629/E1093629@UnixDB03 << EOF
+   set heading off;
+   set feedback off;
+ update passenger set account_balence=$nam where p_id='$passenger';
+  commit;
+ exit;
+EOF
+;;
+                         g)
+                         echo "enter the new password"
+                         read nam
+sqlplus -S E1093629/E1093629@UnixDB03 << EOF
+   set heading off;
+   set feedback off;
+ update passenger set password='$nam' where p_id='$passenger';
+  commit;
+ exit;
+EOF
+;;
+esac
+                fi
+                if [ $choice == "3" ]
+                then
+train=(`sqlplus -S E1093629/E1093629@UnixDB03 << EOF
+set heading off;
+set feedback off;
+select * from passenger;
+exit;
+EOF`)
+                count=0
+echo ${train[*]}
+                while (( $count < ${#train[@]} ))
+                do
+                        for ((i = 1; i <= 7; i++)); do
+                                echo -n ${train[count]}
+                                echo -e -n '\t'
+                                count=`expr $count + 1`
+                        done
+                        echo
+                done
+
+                        echo "select the passenger to delete"
+                        #passenger list
+                        read passengerId
+                        #oracle statement
+sqlplus -S E1093629/E1093629@UnixDB03 << EOF
+   set heading off;
+   set feedback off;
+ delete from passenger where p_id='$passengerId';
+
+ commit;
+ exit;
+EOF
+                fi
+        fi
+        if [ $tableName == "b" ]
+        then
+                #show list of passengers
+                echo "select the choice :1)Insert 2)Update 3)Delete: "
+                read choice
+                if [ $choice == "1" ]
+                then
+                        echo "Enter train number: "
+                        read trainNumber
+                        echo "Enter source: "
+                        read source
+                        echo "Enter destination: "
+                        read destination
+                        echo "Enter fare: "
+                        read fare
+                        echo "Enter seat capacity: "
+                        read seat
+                        echo "Enter days of journey(comma-separated): "
+                        read days
+                        #dml commands
+sqlplus -S E1093629/E1093629@UnixDB03 <<EOF
+set heading off;
+set feedback off;
+insert into train_info values($trainNumber,'$source','$destination',$fare,$seat,'$days');
+exit;
+EOF
+
+             fi
+                if [ $choice == "2" ]
+                then
+train=(`sqlplus -S E1093629/E1093629@UnixDB03 << EOF
+set heading off;
+set feedback off;
+select * from train_info;
+exit;
+EOF`)
+                count=0
+echo ${train[*]}
+                while (( $count < ${#train[@]} ))
+                do
+                        for ((i = 1; i <= 6; i++)); do
+                                echo -n ${train[count]}
+                                echo -e -n '\t'
+                                count=`expr $count + 1`
+                        done
+                        echo
+                done
+
+
+                        echo "select the train number to make changes\n"
+                        #passenger list
+                        read trainNumber
+                         echo -e "what you want to update a)source b)destination  c)price d)seat_no e)day "
+                        read choice
+                        case $choice in
+                        a)
+                       echo "enter the new source"
+                        read nam
+sqlplus -S E1093629/E1093629@UnixDB03 << EOF
+   set heading off;
+   set feedback off;
+ update train_info set source='$nam' where train_number='$trainNumber';
+  commit;
+ exit;
+EOF
+;;
+                        b)
+                         echo "enter the new  destination"
+                        read nam
+sqlplus -S E1093629/E1093629@UnixDB03 << EOF
+   set heading off;
+   set feedback off;
+ update train_info set destination='$nam' where train_number='$trainNumber';
+  commit;
+ exit;
+EOF
+;;
+                         c)
+                         echo "enter the new price"
+                        read nam
+sqlplus -S E1093629/E1093629@UnixDB03 << EOF
+   set heading off;
+   set feedback off;
+ update train_info set price=$nam where train_number='$trainNumber';
+  commit;
+ exit;
+EOF
+;;
+                          d)
+                         echo "enter the new seat_no"
+                         read nam
+sqlplus -S E1093629/E1093629@UnixDB03 << EOF
+   set heading off;
+   set feedback off;
+ update train_info set seat_no='$num' where train_number='$trainNumber';
+  commit;
+ exit;
+EOF
+;;
+                          e)
+                         echo "enter the new days"
+
+
+                         read nam
+sqlplus -S E1093629/E1093629@UnixDB03 << EOF
+   set heading off;
+   set feedback off;
+ update train_info set day=$nam where train_number='$trainNumber';
+  commit;
+ exit;
+EOF
+;;
+esac
+
+
+                fi
+                if [ $choice == "3" ]
+                then
+train=(`sqlplus -S E1093629/E1093629@UnixDB03 << EOF
+set heading off;
+set feedback off;
+select * from train_info;
+exit;
+EOF`)
+                count=0
+echo ${train[*]}
+                while (( $count < ${#train[@]} ))
+                do
+                        for ((i = 1; i <= 6; i++)); do
+                                echo -n ${train[count]}
+                                echo -e -n '\t'
+                                count=`expr $count + 1`
+                        done
+                        echo
+                done
+
+                        echo "select the train number to delete\n"
+                        #passenger list
+                        read trainNumber
+sqlplus -S E1093629/E1093629@UnixDB03 << EOF
+   set heading off;
+   set feedback off;
+ delete from train_info where train_number='$trainNumber';
+ commit;
+ exit;
+EOF
+
+                fi
+        fi
+fi
+echo "Do you wish to quit?(y/n) "
+read choice
+if [ $choice == "y" ]
+then
+        break
+fi
+clear
+done
+
